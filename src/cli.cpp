@@ -1,7 +1,7 @@
 #include <iostream>
 #include "cli.h"
 #include "operations.h"
-#include "io.h"
+#include "storage.h"
 #include "error.h"
 #include "utils.h"
 
@@ -108,7 +108,7 @@ int loadCommand(const vector<string> &args)
 
     cout << "Loading image..." << endl;
 
-    return load(args.at(0), args.at(1));
+    return Storage::getInstance().loadFromFile(args.at(0), args.at(1));
 }
 
 int storeCommand(const vector<string> &args)
@@ -119,8 +119,9 @@ int storeCommand(const vector<string> &args)
     }
 
     cout << "Saving image..." << endl;
+    Storage &storage = Storage::getInstance();
 
-    return store(args.at(0), args.at(1));
+    return Storage::getInstance().saveToFile(args.at(0), args.at(1));
 }
 
 int blurCommand(const vector<string> &args)
