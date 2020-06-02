@@ -4,6 +4,10 @@ CXX=g++
 MKDIR=mkdir
 RM=rm
 
+SRC_DIR=src
+BUILD_DIR=build
+IM_DIR=./ImageMagick
+
 DEBUG ?= 1
 ifeq ($(DEBUG), 1)
 	CXXFLAGS=-g3 -gdwarf-2 -DDEBUG
@@ -11,24 +15,24 @@ else
 	CXXFLAGS=-DNDEBUG
 endif
 
-LDFLAGS=
-SRC_DIR=src
-BUILD_DIR=build
-SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
-OBJECTS = $(patsubst $(SRC_DIR)/%,$(BUILD_DIR)/%,$(SOURCES:.cpp=.o))
+LDFLAGS+=$(shell pkg-config --libs Magick++)
+LDFLAGS+=-lgomp -pthread
+CXXFLAGS+=$(shell pkg-config --cflags Magick++)
 
-# .PHONY: ImageMagick
-# ImageMagick:
-# 	echo "Building ImageMagick..."
-# 	git submodule update
-# 	cd ./ImageMagick && ./configure --enable-delegate-build --disable-shared --disable-installed --enable-static --without-modules --with-zero-configuration
-# 	make
-# 	echo "ImageMagick built."
+SOURCES=$(wildcard $(SRC_DIR)/*.cpp)
+OBJECTS=$(patsubst $(SRC_DIR)/%,$(BUILD_DIR)/%,$(SOURCES:.cpp=.o))
 
-all: clean $(TARGET)  #ImageMagick
+ImageMagick:
+	echo "Building ImageMagick..."
+	git submodule update
+	cd ./ImageMagick && ./configure --enable-delegate-build --disable-shared
+	make clean && make -C $(IM_DIR) && make -C $(IM_DIR) install
+	echo "ImageMagick installed."
 
-$(TARGET): $(OBJECTS) 
-	$(CXX) $(LDFLAGS) $(OBJECTS) -o $@
+all: purge ImageMagick $(TARGET)
+
+$(TARGET): $(OBJECTS)
+	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
 
 $(BUILD_DIR):
 	$(MKDIR) $(BUILD_DIR)
@@ -38,5 +42,11 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
 
 clean:
 	$(RM) -rf $(BUILD_DIR)
-	
-.PHONY: all clean
+
+purge:
+	$(RM) -rf $(BUILD_DIR) $(TARGET) $(IM_DIR)
+
+test:
+	echo "Building tests..."
+
+.PHONY: all clean purge test ImageMagick
