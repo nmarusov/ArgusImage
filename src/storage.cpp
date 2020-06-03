@@ -25,7 +25,28 @@ int Storage::loadFromFile(string name, string filename)
     return OK;
 }
 
-int Storage::saveToFile(string name, string filename) { return OK; }
+int Storage::saveToFile(string name, string filename)
+{
+    auto it = images.find(name);
+
+    if (it == images.end())
+    {
+        cout << "Image with name " << name << " is absent" << endl;
+        return RUNTIME_ERROR;
+    }
+
+    try
+    {
+        it->second.write(filename);
+    }
+    catch (Exception &error_)
+    {
+        cout << "Cannot write image to file " << filename << ": " << error_.what() << endl;
+        return RUNTIME_ERROR;
+    }
+
+    return OK;
+}
 
 int Storage::get(string name, Image &image)
 {
