@@ -16,9 +16,38 @@ static CommandStruct commandTable[] = {
     {"store", "s", storeCommand},
     {"blur", nullptr, blurCommand},
     {"resize", nullptr, resizeCommand},
-    {"help", nullptr, helpCommand},
+    {"help", "h", helpCommand},
     {"quit", "q", quitCommand},
     {"exit", nullptr, quitCommand}};
+
+const char *HELP = R"(
+Справка по интерактивном интерфейсу:
+load, ld        Загрузка изображения в формате JPG
+    Параметры:
+                <name> - имя изображения, по имени оно доступно в других командах
+                <filename> - имя файла для загрузки
+
+store, s        Сохранение изображения в формате jpg
+    Параметры:
+                <name> - имя изображения
+                <filename> - имя файла для сохранениея
+
+blur            Сглаживание изображение
+    Параметры:
+                <from_name> - имя изображения
+                <to_name> - имя изображения
+                <size> - размер сглаживаемой области
+
+resize          Изменение размера изображения
+    Параметры:
+                <from_name> - имя изображения
+                <to_name> - имя изображения
+                <new_width>
+                <new_height>
+
+help, h         Выводит справку о поддерживаемых командах
+
+exit, quit, q   Выход)";
 
 static int dispatch(string input);
 
@@ -35,16 +64,16 @@ int prompt()
         switch (result)
         {
         case QUIT:
-            cout << "Bye!" << endl;
+            cout << "До свидания!" << endl;
             return 0;
         case UNKNOWN_COMMAND:
-            cout << "Unknown command" << endl;
+            cout << "Неизвестная команда" << endl;
             break;
         case INVALID_PARAMETER:
-            cout << "Invalid parameter" << endl;
+            cout << "Неправильный параметр" << endl;
             break;
         case RUNTIME_ERROR:
-            cout << "Runtime error" << endl;
+            cout << "Ошибка времени исполнения" << endl;
             break;
 
         default:
@@ -106,7 +135,7 @@ int loadCommand(const vector<string> &args)
         return INVALID_PARAMETER;
     }
 
-    cout << "Loading image... ";
+    cout << "Загрузка изображения... ";
 
     int err = Storage::getInstance().loadFromFile(args.at(0), args.at(1));
 
@@ -124,7 +153,7 @@ int storeCommand(const vector<string> &args)
         return INVALID_PARAMETER;
     }
 
-    cout << "Saving image... ";
+    cout << "Сохранение изображения... ";
     Storage &storage = Storage::getInstance();
 
     int err = Storage::getInstance().saveToFile(args.at(0), args.at(1));
@@ -143,7 +172,7 @@ int blurCommand(const vector<string> &args)
         return INVALID_PARAMETER;
     }
 
-    cout << "Blurring... ";
+    cout << "Размытие... ";
 
     int err = blur(args.at(0), args.at(1), stoi(args.at(2)));
 
@@ -161,7 +190,7 @@ int resizeCommand(const vector<string> &args)
         return INVALID_PARAMETER;
     }
 
-    cout << "Resizing... ";
+    cout << "Изменение размера... ";
 
     int err = resize(args.at(0), args.at(1), stoi(args.at(2)), stoi(args.at(3)));
 
@@ -174,7 +203,7 @@ int resizeCommand(const vector<string> &args)
 
 int helpCommand(const vector<string> &args)
 {
-    cout << "Help" << endl;
+    cout << HELP << endl;
     return OK;
 }
 

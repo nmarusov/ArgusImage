@@ -12,13 +12,13 @@ int Storage::loadFromFile(string name, string filename)
     }
     catch (Exception &error_)
     {
-        cout << "Cannot read image from file " << filename << ": " << error_.what() << endl;
+        cout << "Ошибка: " << error_.what() << endl;
         return RUNTIME_ERROR;
     }
 
     if (!result.second)
     {
-        cout << "Image with name " << name << " already exists: not loaded" << endl;
+        cout << "Изображение с именем " << name << " уже присутствует: операция отменена" << endl;
         return RUNTIME_ERROR;
     }
 
@@ -31,7 +31,7 @@ int Storage::saveToFile(string name, string filename)
 
     if (it == images.end())
     {
-        cout << "Image with name " << name << " is absent" << endl;
+        cout << "Изображение с именем " << name << " отсутствует" << endl;
         return RUNTIME_ERROR;
     }
 
@@ -41,7 +41,7 @@ int Storage::saveToFile(string name, string filename)
     }
     catch (Exception &error_)
     {
-        cout << "Cannot write image to file " << filename << ": " << error_.what() << endl;
+        cout << "Ошибка: " << error_.what() << endl;
         return RUNTIME_ERROR;
     }
 
@@ -54,7 +54,7 @@ int Storage::get(string name, Image &image)
 
     if (it == images.end())
     {
-        cout << "Image with name " << name << " is absent" << endl;
+        cout << "Изображение с именем " << name << " отсутствует" << endl;
         return RUNTIME_ERROR;
     }
 
@@ -71,7 +71,7 @@ int Storage::add(string name, const Image &image)
 
     if (!result.second)
     {
-        cout << "Image with name " << name << " already exists: not loaded" << endl;
+        cout << "Изображение с именем " << name << " уже присутствует: операция отменена" << endl;
         return RUNTIME_ERROR;
     }
 
@@ -85,6 +85,6 @@ int Storage::del(string name)
         return OK;
     };
 
-    cout << "Image with name " << name << " is absent" << endl;
+    cout << "Изображение с именем " << name << " отсутствует" << endl;
     return RUNTIME_ERROR;
 }
