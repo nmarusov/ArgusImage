@@ -124,7 +124,7 @@ int storeCommand(const vector<string> &args)
         return INVALID_PARAMETER;
     }
 
-    cout << "Saving image..." << endl;
+    cout << "Saving image... ";
     Storage &storage = Storage::getInstance();
 
     int err = Storage::getInstance().saveToFile(args.at(0), args.at(1));
