@@ -1,4 +1,3 @@
-#include <iostream>
 #include <Magick++.h>
 #include "cli.h"
 
