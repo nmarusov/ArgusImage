@@ -1,24 +1,33 @@
 #include <iostream>
 #include "operations.h"
 #include "error.h"
+#include "storage.h"
 
 using namespace std;
 
 int blur(string from_name, string to_name, int size)
 {
-    cout << from_name << endl;
-    cout << to_name << endl;
-    cout << size * 2 << endl;
+    Image orig;
 
-    return OK;
+    int err = Storage::getInstance().get(from_name, orig);
+
+    if (err != OK)
+    {
+        return err;
+    }
+
+    Image target(orig);
+    target.blur((const double)size);
+    err = Storage::getInstance().add(to_name, target);
+
+    return err;
 }
 
 int resize(string from_name, string to_name, int new_width, int new_height)
 {
-    cout << from_name << endl;
-    cout << to_name << endl;
-    cout << new_width * 2 << endl;
-    cout << new_height * 2 << endl;
+    Image orig;
 
-    return OK;
+    int err = Storage::getInstance().get(from_name, orig);
+
+    return err;
 }
