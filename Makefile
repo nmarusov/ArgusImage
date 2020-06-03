@@ -16,7 +16,7 @@ else
 endif
 
 LDFLAGS+=$(shell pkg-config --libs Magick++)
-LDFLAGS+=-lgomp -pthread
+LDFLAGS+=-lgomp -pthread -ljpeg
 CXXFLAGS+=$(shell pkg-config --cflags Magick++)
 
 SOURCES=$(wildcard $(SRC_DIR)/*.cpp)
@@ -25,7 +25,7 @@ OBJECTS=$(patsubst $(SRC_DIR)/%,$(BUILD_DIR)/%,$(SOURCES:.cpp=.o))
 ImageMagick:
 	echo "Building ImageMagick..."
 	git submodule update
-	cd ./ImageMagick && ./configure --enable-delegate-build --disable-shared
+	cd ./ImageMagick && ./configure --enable-delegate-build --disable-shared --with-jpeg
 	make clean && make -C $(IM_DIR) && make -C $(IM_DIR) install
 	echo "ImageMagick installed."
 
