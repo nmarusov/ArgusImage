@@ -106,9 +106,15 @@ int loadCommand(const vector<string> &args)
         return INVALID_PARAMETER;
     }
 
-    cout << "Loading image..." << endl;
+    cout << "Loading image... ";
 
-    return Storage::getInstance().loadFromFile(args.at(0), args.at(1));
+    int err = Storage::getInstance().loadFromFile(args.at(0), args.at(1));
+
+    if (err == OK)
+    {
+        cout << "OK" << endl;
+    }
+    return err;
 }
 
 int storeCommand(const vector<string> &args)
@@ -121,7 +127,13 @@ int storeCommand(const vector<string> &args)
     cout << "Saving image..." << endl;
     Storage &storage = Storage::getInstance();
 
-    return Storage::getInstance().saveToFile(args.at(0), args.at(1));
+    int err = Storage::getInstance().saveToFile(args.at(0), args.at(1));
+
+    if (err == OK)
+    {
+        cout << "OK" << endl;
+    }
+    return err;
 }
 
 int blurCommand(const vector<string> &args)
@@ -131,9 +143,15 @@ int blurCommand(const vector<string> &args)
         return INVALID_PARAMETER;
     }
 
-    cout << "Blurring..." << endl;
+    cout << "Blurring... ";
 
-    return blur(args.at(0), args.at(1), stoi(args.at(2)));
+    int err = blur(args.at(0), args.at(1), stoi(args.at(2)));
+
+    if (err == OK)
+    {
+        cout << "OK" << endl;
+    }
+    return err;
 }
 
 int resizeCommand(const vector<string> &args)
@@ -143,9 +161,15 @@ int resizeCommand(const vector<string> &args)
         return INVALID_PARAMETER;
     }
 
-    cout << "Resizing..." << endl;
+    cout << "Resizing... ";
 
-    return resize(args.at(0), args.at(1), stoi(args.at(2)), stoi(args.at(3)));
+    int err = resize(args.at(0), args.at(1), stoi(args.at(2)), stoi(args.at(3)));
+
+    if (err == OK)
+    {
+        cout << "OK" << endl;
+    }
+    return err;
 }
 
 int helpCommand(const vector<string> &args)
