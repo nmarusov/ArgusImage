@@ -19,6 +19,7 @@ int Storage::loadFromFile(string name, string filename)
     if (!result.second)
     {
         cout << "Image with name " << name << " already exists: not loaded" << endl;
+        return RUNTIME_ERROR;
     }
 
     return OK;
@@ -41,7 +42,28 @@ int Storage::get(string name, Image &image)
     return OK;
 }
 
-void Storage::del(string name)
+int Storage::add(string name, const Image &image)
 {
-    images.erase(name);
+    pair<map<string, Image>::iterator, bool> result;
+
+    result = images.emplace(name, move(image));
+
+    if (!result.second)
+    {
+        cout << "Image with name " << name << " already exists: not loaded" << endl;
+        return RUNTIME_ERROR;
+    }
+
+    return OK;
+}
+
+int Storage::del(string name)
+{
+    if (images.erase(name) > 0)
+    {
+        return OK;
+    };
+
+    cout << "Image with name " << name << " is absent" << endl;
+    return RUNTIME_ERROR;
 }

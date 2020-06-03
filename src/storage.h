@@ -28,7 +28,8 @@ public:
     int loadFromFile(string name, string filename);
     int saveToFile(string name, string filename);
     int get(string name, Image &image);
-    void del(string name);
+    int add(string name, const Image &image);
+    int del(string name);
 };
 
 #endif
