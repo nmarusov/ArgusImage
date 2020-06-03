@@ -17,7 +17,7 @@ int blur(string from_name, string to_name, int size)
     }
 
     Image target(orig);
-    target.blur((const double)size);
+    target.blur((const double)size, 10.0);
     err = Storage::getInstance().add(to_name, target);
 
     return err;
