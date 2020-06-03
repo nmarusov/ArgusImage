@@ -16,7 +16,7 @@ private:
     Storage(const Storage &other) = delete;
     void operator=(const Storage &) = delete;
 
-    // map<string, Image> images;
+    map<string, Image> images;
 
 public:
     static Storage &getInstance()
@@ -27,7 +27,7 @@ public:
 
     int loadFromFile(string name, string filename);
     int saveToFile(string name, string filename);
-    Image *get(string name);
+    int get(string name, Image &image);
     void del(string name);
 };
 
